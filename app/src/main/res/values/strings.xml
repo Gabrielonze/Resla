@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Resla</string>
+    <string name="title_home">Home</string>
+    <string name="title_qr">Ler Codigo QR</string>
+    <string name="title_notifications">Notifications</string>
+
+
+    <string name="title_cardapio">Cardapio</string>
+    <string name="title_pedidos">Pedidos</string>
+    <string name="product_not_found">Produto não Encontrado</string>
+</resources>
