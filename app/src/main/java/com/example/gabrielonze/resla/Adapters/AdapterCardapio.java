@@ -1,5 +1,6 @@
 package com.example.gabrielonze.resla.Adapters;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -7,11 +8,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.gabrielonze.resla.FoodDetailsActivity;
 import com.example.gabrielonze.resla.InRestaurantActivity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.example.gabrielonze.resla.R;
 import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
 
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -79,7 +84,7 @@ public class AdapterCardapio extends BaseAdapter {
                 desc_txt.setText(product.getDescription());
 
                 String valorString = NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(product.getPrice());
-                addButton.setText("Pedir - " + valorString);
+                addButton.setText("Detalhes - " + valorString);
 
                 Picasso.with(act.getApplicationContext()).load(product.getImageUrl()).
                         placeholder(android.R.drawable.progress_indeterminate_horizontal).
@@ -89,11 +94,7 @@ public class AdapterCardapio extends BaseAdapter {
                 addButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        CardapioResponse cr = new CardapioResponse(product.getId(), product.getName(), product.getDescription(), product.getImageUrl(), product.getPrice());
-                        act.addProduct(cr);
-
-                        notifyDataSetChanged();
+                        productDetails(product);
                     }
                 });
 
@@ -106,5 +107,16 @@ public class AdapterCardapio extends BaseAdapter {
         }
 
         return view;
+    }
+
+
+    private void productDetails(CardapioResponse ar) {
+        Intent i = new Intent(act, FoodDetailsActivity.class);
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<CardapioResponse>() {}.getType();
+        String json = gson.toJson(ar, type);
+        i.putExtra("product", json);
+        act.startActivityForResult(i, 1);
     }
 }
