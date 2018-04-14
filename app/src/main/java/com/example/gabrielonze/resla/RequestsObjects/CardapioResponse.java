@@ -26,12 +26,15 @@ public class CardapioResponse {
     @SerializedName("category")
     @Expose
     private String category;
+    @SerializedName("rating")
+    @Expose
+    private double rating;
 
 
     public CardapioResponse() {
     }
 
-    public CardapioResponse(int id, String name, String description, String imageUrl, Double price, int quantity, String category) {
+    public CardapioResponse(int id, String name, String description, String imageUrl, Double price, int quantity, String category, double rating) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -39,6 +42,7 @@ public class CardapioResponse {
         this.price = price;
         this.quantity = quantity;
         this.category = category;
+        this.rating = rating;
     }
 
     public int getId() {
@@ -63,6 +67,10 @@ public class CardapioResponse {
 
     public String getCategory() {
         return category;
+    }
+
+    public double getRating() {
+        return rating;
     }
 
     public int getQuantity() {

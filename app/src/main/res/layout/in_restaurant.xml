@@ -29,10 +29,18 @@
             android:background="?android:attr/windowBackground"
             app:menu="@menu/restaurant_menu" />
 
+        <Button
+            android:id="@+id/call_waiter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/navigation"
+            android:text="Chamar Atendente"
+            android:visibility="gone" />
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/navigation"
+            android:layout_above="@+id/call_waiter"
             android:layout_below="@+id/restaurant_name"
             android:id="@+id/productList"/>
 
@@ -40,8 +48,10 @@
             android:id="@+id/orderList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/navigation"
+            android:layout_above="@+id/call_waiter"
             android:visibility="gone"/>
+
+
 
     </RelativeLayout>
 

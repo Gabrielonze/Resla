@@ -49,14 +49,12 @@ public class AdapterCardapio extends BaseAdapter {
         return 0;
     }
 
-
-
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
 
         final ImageView logo;
         final TextView name_txt, desc_txt;
-        final Button addButton, rmButton;
+        final Button addButton;
 
         View view = act.getLayoutInflater().inflate(R.layout.adapter_product, parent, false);
 
@@ -64,16 +62,12 @@ public class AdapterCardapio extends BaseAdapter {
         name_txt = view.findViewById(R.id.food_name);
         desc_txt = view.findViewById(R.id.food_description);
         addButton = view.findViewById(R.id.add_button);
-        //rmButton = view.findViewById(R.id.rm_button);
 
         if (pedido) {
             addButton.setVisibility(Button.GONE);
-            //rmButton.setVisibility(Button.VISIBLE);
         } else {
-            //rmButton.setVisibility(Button.GONE);
             addButton.setVisibility(Button.VISIBLE);
         }
-
 
         if (convertView == null) {
             final CardapioResponse product = quotes.get(position);
@@ -81,7 +75,12 @@ public class AdapterCardapio extends BaseAdapter {
             if (product != null) {
 
                 name_txt.setText(product.getName());
-                desc_txt.setText(product.getDescription());
+
+                if (pedido) {
+                    desc_txt.setText("Quantidade: " + product.getQuantity());
+                } else {
+                    desc_txt.setText("Nota: " + product.getRating());
+                }
 
                 String valorString = NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(product.getPrice());
                 addButton.setText("Detalhes - " + valorString);
@@ -112,7 +111,6 @@ public class AdapterCardapio extends BaseAdapter {
 
     private void productDetails(CardapioResponse ar) {
         Intent i = new Intent(act, FoodDetailsActivity.class);
-
         Gson gson = new Gson();
         Type type = new TypeToken<CardapioResponse>() {}.getType();
         String json = gson.toJson(ar, type);
