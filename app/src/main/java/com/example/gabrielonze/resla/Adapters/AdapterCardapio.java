@@ -23,7 +23,7 @@ import java.util.Locale;
 
 public class AdapterCardapio extends BaseAdapter {
 
-    private final List<CardapioResponse> quotes;
+    public List<CardapioResponse> quotes;
     private final InRestaurantActivity act;
     private final Boolean pedido;
 
@@ -79,7 +79,7 @@ public class AdapterCardapio extends BaseAdapter {
                 if (pedido) {
                     desc_txt.setText("Quantidade: " + product.getQuantity());
                 } else {
-                    desc_txt.setText("Nota: " + product.getRating());
+                    desc_txt.setText("Nota: " + product.getRating() + " - Categoria: " + product.getCategory());
                 }
 
                 String valorString = NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(product.getPrice());

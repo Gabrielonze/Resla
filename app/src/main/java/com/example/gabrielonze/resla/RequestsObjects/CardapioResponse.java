@@ -91,6 +91,7 @@ public class CardapioResponse {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", category='" + category + '\'' +
+                ", rating=" + rating +
                 '}';
     }
 }
