@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Resla</string>
-    <string name="title_home">Home</string>
+    <string name="title_top_res">Top Restaurantes</string>
+    <string name="title_reservas">Reservas</string>
     <string name="title_qr">Ler Codigo QR</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_user">Você</string>
 
 
     <string name="title_cardapio">Cardapio</string>

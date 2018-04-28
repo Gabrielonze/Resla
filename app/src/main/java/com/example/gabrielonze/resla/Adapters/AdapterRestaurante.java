@@ -10,26 +10,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gabrielonze.resla.FoodDetailsActivity;
-import com.example.gabrielonze.resla.InRestaurantActivity;
+import com.example.gabrielonze.resla.R;
+import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
+import com.example.gabrielonze.resla.RequestsObjects.RestauranteResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
-import com.example.gabrielonze.resla.R;
-import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
 
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class AdapterCardapio extends BaseAdapter {
+public class AdapterRestaurante extends BaseAdapter {
 
-    public List<CardapioResponse> quotes;
+    public List<RestauranteResponse> quotes;
     private final AppCompatActivity act;
     private final Boolean pedido;
 
 
-    public AdapterCardapio(List<CardapioResponse> quotes, AppCompatActivity act, Boolean pedido) {
+    public AdapterRestaurante(List<RestauranteResponse> quotes, AppCompatActivity act, Boolean pedido) {
         this.quotes = quotes;
         this.act = act;
         this.pedido = pedido;
@@ -64,27 +64,15 @@ public class AdapterCardapio extends BaseAdapter {
         desc_txt = view.findViewById(R.id.food_description);
         addButton = view.findViewById(R.id.add_button);
 
-        if (pedido) {
-            addButton.setVisibility(Button.GONE);
-        } else {
-            addButton.setVisibility(Button.VISIBLE);
-        }
-
         if (convertView == null) {
-            final CardapioResponse product = quotes.get(position);
+            final RestauranteResponse product = quotes.get(position);
 
             if (product != null) {
 
                 name_txt.setText(product.getName());
 
-                if (pedido) {
-                    desc_txt.setText("Quantidade: " + product.getQuantity());
-                } else {
-                    desc_txt.setText("Nota: " + product.getRating() + " - Categoria: " + product.getCategory());
-                }
-
-                String valorString = NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(product.getPrice());
-                addButton.setText("Detalhes - " + valorString);
+                desc_txt.setText("Nota: " + product.getRating());
+                addButton.setText("Ver pratos");
 
                 Picasso.with(act.getApplicationContext()).load(product.getImageUrl()).
                         placeholder(android.R.drawable.progress_indeterminate_horizontal).
@@ -110,12 +98,12 @@ public class AdapterCardapio extends BaseAdapter {
     }
 
 
-    private void productDetails(CardapioResponse ar) {
-        Intent i = new Intent(act, FoodDetailsActivity.class);
+    private void productDetails(RestauranteResponse ar) {
+        /*Intent i = new Intent(act, FoodDetailsActivity.class);
         Gson gson = new Gson();
         Type type = new TypeToken<CardapioResponse>() {}.getType();
         String json = gson.toJson(ar, type);
         i.putExtra("product", json);
-        act.startActivityForResult(i, 1);
+        act.startActivityForResult(i, 1);*/
     }
 }
