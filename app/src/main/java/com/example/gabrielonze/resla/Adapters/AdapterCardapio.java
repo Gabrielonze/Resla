@@ -26,13 +26,14 @@ public class AdapterCardapio extends BaseAdapter {
 
     public List<CardapioResponse> quotes;
     private final AppCompatActivity act;
-    private final Boolean pedido;
+    private final Boolean pedido, notaCat;
 
 
-    public AdapterCardapio(List<CardapioResponse> quotes, AppCompatActivity act, Boolean pedido) {
+    public AdapterCardapio(List<CardapioResponse> quotes, AppCompatActivity act, Boolean pedido, Boolean notaCat) {
         this.quotes = quotes;
         this.act = act;
         this.pedido = pedido;
+        this.notaCat = notaCat;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class AdapterCardapio extends BaseAdapter {
 
                 name_txt.setText(product.getName());
 
-                if (pedido) {
+                if (pedido && !notaCat) {
                     desc_txt.setText("Quantidade: " + product.getQuantity());
                 } else {
                     desc_txt.setText("Nota: " + product.getRating() + " - Categoria: " + product.getCategory());

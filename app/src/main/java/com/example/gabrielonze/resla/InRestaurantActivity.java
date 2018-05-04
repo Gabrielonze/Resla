@@ -82,8 +82,8 @@ public class InRestaurantActivity extends AppCompatActivity {
 
         listOrders = new ArrayList<>();
 
-        adapterCardapio = new AdapterCardapio(listCardapio, this, false);
-        adapterPedidos = new AdapterCardapio(listOrders, this, true);
+        adapterCardapio = new AdapterCardapio(listCardapio, this, false, false);
+        adapterPedidos = new AdapterCardapio(listOrders, this, true, false);
         listProducts.setAdapter(adapterCardapio);
         listPedidos.setAdapter(adapterPedidos);
 

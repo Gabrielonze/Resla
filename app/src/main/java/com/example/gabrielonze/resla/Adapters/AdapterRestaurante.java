@@ -13,6 +13,7 @@ import com.example.gabrielonze.resla.FoodDetailsActivity;
 import com.example.gabrielonze.resla.R;
 import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
 import com.example.gabrielonze.resla.RequestsObjects.RestauranteResponse;
+import com.example.gabrielonze.resla.RestaurantActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -99,11 +100,8 @@ public class AdapterRestaurante extends BaseAdapter {
 
 
     private void productDetails(RestauranteResponse ar) {
-        /*Intent i = new Intent(act, FoodDetailsActivity.class);
-        Gson gson = new Gson();
-        Type type = new TypeToken<CardapioResponse>() {}.getType();
-        String json = gson.toJson(ar, type);
-        i.putExtra("product", json);
-        act.startActivityForResult(i, 1);*/
+        Intent i = new Intent(act, RestaurantActivity.class);
+        // i.putExtra("product", json);
+        act.startActivityForResult(i, 1);
     }
 }
