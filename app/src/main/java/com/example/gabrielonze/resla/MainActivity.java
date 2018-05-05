@@ -9,9 +9,10 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.gabrielonze.resla.Adapters.AdapterBook;
 import com.example.gabrielonze.resla.Adapters.AdapterCardapio;
 import com.example.gabrielonze.resla.Adapters.AdapterRestaurante;
-import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
+import com.example.gabrielonze.resla.RequestsObjects.BookResponse;
 import com.example.gabrielonze.resla.RequestsObjects.RestauranteResponse;
 
 import java.util.ArrayList;
@@ -20,9 +21,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-    ListView listRes;
+    ListView listRes, listBook;
     AdapterRestaurante adapterRes;
+    AdapterBook adapterBook;
     List<RestauranteResponse> listRest;
+    List<BookResponse> listBok;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -31,17 +34,18 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_top_res:
-                    //mTextMessage.setText(R.string.title_top_res);
+                    listRes.setVisibility(ListView.VISIBLE);
+                    listBook.setVisibility(ListView.GONE);
+                    /*listProducts.setVisibility(ListView.GONE);*/
                     return true;
                 case R.id.navigation_reservas:
-                    //mTextMessage.setText(R.string.title_reservas);
+                    listRes.setVisibility(ListView.GONE);
+                    listBook.setVisibility(ListView.VISIBLE);
                     return true;
                 case R.id.navigation_read_qr:
-                    //mTextMessage.setText(R.string.title_qr);
                     openQRActivity();
                     return true;
                 case R.id.navigation_user:
-                    //mTextMessage.setText(R.string.title_user);
                     return true;
             }
             return false;
@@ -53,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listRes = findViewById(R.id.top_res);
+        listBook = findViewById(R.id.books);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -67,8 +71,16 @@ public class MainActivity extends AppCompatActivity {
         listRest.add(new RestauranteResponse(1, "Bobs", imgUrl, 3.33D));
         listRest.add(new RestauranteResponse(1, "Habibs", imgUrl, 0D));
 
-        adapterRes = new AdapterRestaurante(listRest, this, false);
+        adapterRes = new AdapterRestaurante(listRest, this, true);
         listRes.setAdapter(adapterRes);
+
+
+        listBok = new ArrayList<>();
+        listBok.add(new BookResponse(1, "Bobs", imgUrl, false, 2));
+        listBok.add(new BookResponse(1, "Habibs", imgUrl, true, 5));
+
+        adapterBook = new AdapterBook(listBok, this);
+        listBook.setAdapter(adapterBook);
 
     }
 

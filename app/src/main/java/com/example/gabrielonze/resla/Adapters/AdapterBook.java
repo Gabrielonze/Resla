@@ -9,31 +9,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gabrielonze.resla.FoodDetailsActivity;
 import com.example.gabrielonze.resla.R;
-import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
+import com.example.gabrielonze.resla.RequestsObjects.BookResponse;
 import com.example.gabrielonze.resla.RequestsObjects.RestauranteResponse;
 import com.example.gabrielonze.resla.RestaurantActivity;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Type;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
-public class AdapterRestaurante extends BaseAdapter {
+public class AdapterBook extends BaseAdapter {
 
-    public List<RestauranteResponse> quotes;
+    public List<BookResponse> quotes;
     private final AppCompatActivity act;
-    private final Boolean book;
 
 
-    public AdapterRestaurante(List<RestauranteResponse> quotes, AppCompatActivity act, Boolean book) {
+    public AdapterBook(List<BookResponse> quotes, AppCompatActivity act) {
         this.quotes = quotes;
         this.act = act;
-        this.book = book;
     }
 
     @Override
@@ -66,13 +58,13 @@ public class AdapterRestaurante extends BaseAdapter {
         addButton = view.findViewById(R.id.add_button);
 
         if (convertView == null) {
-            final RestauranteResponse product = quotes.get(position);
+            final BookResponse product = quotes.get(position);
 
             if (product != null) {
 
                 name_txt.setText(product.getName());
 
-                desc_txt.setText("Nota: " + product.getRating());
+                desc_txt.setText("Pessoas: " + product.getPeople());
                 addButton.setText("Ver pratos");
 
                 Picasso.with(act.getApplicationContext()).load(product.getImageUrl()).
@@ -87,6 +79,13 @@ public class AdapterRestaurante extends BaseAdapter {
                     }
                 });
 
+                if(product.isUsed()){
+                    addButton.setVisibility(Button.GONE);
+                } else {
+                    addButton.setText("Cancelar");
+
+                }
+
             } else {
                 System.out.println("Linha não encontrada");
             }
@@ -99,9 +98,11 @@ public class AdapterRestaurante extends BaseAdapter {
     }
 
 
-    private void productDetails(RestauranteResponse ar) {
-        Intent i = new Intent(act, RestaurantActivity.class);
-        // i.putExtra("product", json);
-        act.startActivityForResult(i, 1);
+    private void productDetails(BookResponse ar) {
+        act.finish();
+        act.overridePendingTransition(0, 0);
+        Intent i = act.getIntent();
+        act.startActivity(i);
+        act.overridePendingTransition(0, 0);
     }
 }
