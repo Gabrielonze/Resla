@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_read_qr:
                     openQRActivity();
                     return true;
-                case R.id.navigation_user:
-                    return true;
             }
             return false;
         }

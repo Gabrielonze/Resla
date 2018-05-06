@@ -7,19 +7,15 @@
         android:title="@string/title_top_res" />
 
     <item
-        android:id="@+id/navigation_reservas"
-        android:icon="@drawable/flashlight_turn_off"
-        android:title="@string/title_reservas" />
-
-    <item
         android:id="@+id/navigation_read_qr"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_qr" />
 
     <item
-        android:id="@+id/navigation_user"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_user" />
+        android:id="@+id/navigation_reservas"
+        android:icon="@drawable/flashlight_turn_off"
+        android:title="@string/title_reservas" />
+
 
 </menu>
 
