@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager extends Activity {
 
-private static final String BASE_URL = "http://localhost:9000";
+private static final String BASE_URL = "http://192.168.0.129:9000/";
 
     public static Api getInstance() {
         Gson gson = new GsonBuilder()

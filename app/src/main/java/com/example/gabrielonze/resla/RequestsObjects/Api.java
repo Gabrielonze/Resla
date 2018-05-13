@@ -14,10 +14,10 @@ import retrofit2.http.Query;
 
 public interface Api {
 
-    @GET("restaurantInfo/{restautantId}")
+    @GET("getRestaurant/{restautantId}")
     Call<RestauranteResponse> restaurantInfo(@Path("restautantId") int restautantId);
 
-    @GET("cardapio/{restautantId}")
+    @GET("getDishes/{restautantId}")
     Call<List<CardapioResponse>> cardapio(@Path("restautantId") int restautantId);
 
     @GET("firstScreen")
@@ -26,9 +26,12 @@ public interface Api {
     @GET("callWaiter/{restautantId}/{table}")
     Call<Boolean> callWaiter(@Path("restautantId") int restautantId, @Path("table") int table);
 
+    @FormUrlEncoded
+    @Headers({"Content-Type:application/x-www-form-urlencoded"})
     @POST("saveBook")
-    Call<String> saveBook(@Field("restautantId") int restautantId,
+    Call<OkResponse> saveBook(@Field("restautantId") int restautantId,
                           @Field("peopleAmount") int peopleAmount,
-                          @Field("day") String day);
+                          @Field("day") String day,
+                          @Field("observation") String observation);
 
 }

@@ -37,7 +37,7 @@
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -50,6 +50,20 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="date" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Observações" />
+
+    <EditText
+        android:id="@+id/obs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10" />
 
     <Button
         android:id="@+id/add_button"

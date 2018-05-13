@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.gabrielonze.resla.RequestsObjects.ApiManager;
 import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
+import com.example.gabrielonze.resla.RequestsObjects.OkResponse;
 import com.example.gabrielonze.resla.RequestsObjects.RestauranteResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,7 +30,7 @@ public class BookActivity extends AppCompatActivity {
     private Button addButton;
     private ImageView logo;
     private TextView name_txt;
-    private EditText qtd, day;
+    private EditText qtd, day, obs;
     private int restaurantId;
 
 
@@ -44,28 +45,37 @@ public class BookActivity extends AppCompatActivity {
         name_txt = findViewById(R.id.food_name);
         qtd = findViewById(R.id.qtd);
         day = findViewById(R.id.dayInput);
+        obs = findViewById(R.id.obs);
 
         getRestaurantInfo();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveBook();
+                checkInputs();
             }
         });
     }
 
+    private void checkInputs() {
+        if(qtd.getText().toString().equals("") || qtd.getText().toString().equals("") || day.getText().toString().equals("")){
+            Toast.makeText(this, "Informações incompletas", Toast.LENGTH_SHORT).show();
+        } else {
+            saveBook();
+        }
+    }
+
     private void saveBook() {
 
-        Call<String> req = ApiManager.getInstance().saveBook(restaurantId, Integer.parseInt(qtd.getText().toString()), day.getText().toString());
-        req.enqueue(new Callback<String>() {
+        Call<OkResponse> req = ApiManager.getInstance().saveBook(restaurantId, Integer.parseInt(qtd.getText().toString()), day.getText().toString(), obs.getText().toString());
+        req.enqueue(new Callback<OkResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<OkResponse> call, Response<OkResponse> response) {
                 finish();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<OkResponse> call, Throwable t) {
                 Toast.makeText(BookActivity.this, "Erro :(", Toast.LENGTH_SHORT).show();
             }
         });
