@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gabrielonze.resla.Adapters.AdapterCardapio;
+import com.example.gabrielonze.resla.RequestsObjects.ApiManager;
 import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,13 +29,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class InRestaurantActivity extends AppCompatActivity {
 
-    List<CardapioResponse> listCardapio, listOrders;
+    List<CardapioResponse> listOrders;
     ListView listProducts, listPedidos;
     AdapterCardapio adapterCardapio, adapterPedidos;
     Button callWaiter, sortButton;
     String sort;
+    int restaurantId, table;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,42 +76,34 @@ public class InRestaurantActivity extends AppCompatActivity {
         callWaiter = findViewById(R.id.call_waiter);
         sortButton = findViewById(R.id.sort_button);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        restaurantId = this.getIntent().getIntExtra("restaurantId", -1);
+        table = this.getIntent().getIntExtra("table", -1);
 
-        String imgUrl = "https://i.ytimg.com/vi/mEBFswpYms4/maxresdefault.jpg";
-
-        listCardapio = new ArrayList<>();
-        listCardapio.add(new CardapioResponse(1, "HAHAHA", "Bla bla bla", imgUrl, 9.99, 0, "Pizza", 2.55D));
-        listCardapio.add(new CardapioResponse(1, "HEHEHE", "Bla bla bla bla", imgUrl, 1.69, 0, "Doce", 5D));
-        listCardapio.add(new CardapioResponse(1, "HUEHUE", "Bla bla", imgUrl, 1.99, 0, "Pizza", 4.8D));
-        listCardapio.add(new CardapioResponse(1, "KKKKKK", "Bla", imgUrl, 6.66, 0, "Drinks", 3.33D));
-        listCardapio.add(new CardapioResponse(1, "RSRSRS", "Bla bla bla bla bla", imgUrl, 11.22, 0, "Doce", 0D));
+        getData();
 
         listOrders = new ArrayList<>();
-
-        adapterCardapio = new AdapterCardapio(listCardapio, this, false, false);
         adapterPedidos = new AdapterCardapio(listOrders, this, true, false);
-        listProducts.setAdapter(adapterCardapio);
         listPedidos.setAdapter(adapterPedidos);
 
-        changeSort(false);
+        //changeSort(false);
 
         callWaiter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(InRestaurantActivity.this, "Chamando atendende..", Toast.LENGTH_LONG).show();
+                callWaiter();
             }
         });
 
-        sortButton.setOnClickListener(new View.OnClickListener() {
+        /*sortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeSort(true);
             }
-        });
+        });*/
 
     }
 
-    private void changeSort(Boolean firstTime) {
+    /*private void changeSort(Boolean firstTime) {
 
         String sort = getIntent().getStringExtra("sort");
         if (sort == null)
@@ -150,8 +148,6 @@ public class InRestaurantActivity extends AppCompatActivity {
                 break;
         }
 
-        /*adapterCardapio = new AdapterCardapio(listCardapio, this, false);
-        listProducts.setAdapter(adapterCardapio);*/
         if (firstTime){
             finish();
             overridePendingTransition(0, 0);
@@ -161,7 +157,7 @@ public class InRestaurantActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
         sortButton.setText(sort);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -177,6 +173,47 @@ public class InRestaurantActivity extends AppCompatActivity {
                 adapterPedidos.notifyDataSetChanged();
             }
         }
+    }
+
+    public void getData() {
+        Call<List<CardapioResponse>> req = ApiManager.getInstance().cardapio(restaurantId);
+
+        req.enqueue(new Callback<List<CardapioResponse>>() {
+            @Override
+            public void onResponse(Call<List<CardapioResponse>> call, Response<List<CardapioResponse>> response) {
+                List<CardapioResponse> r = response.body();
+
+                adapterCardapio = new AdapterCardapio(r, InRestaurantActivity.this, true, true);
+                listProducts.setAdapter(adapterCardapio);
+            }
+
+            @Override
+            public void onFailure(Call<List<CardapioResponse>> call, Throwable t) {
+                Toast.makeText(InRestaurantActivity.this, "Erro :(", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void callWaiter() {
+
+        Call<Boolean> req = ApiManager.getInstance().callWaiter(restaurantId, table);
+
+        req.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean r = response.body();
+
+                if(r)
+                    Toast.makeText(InRestaurantActivity.this, "Atendente a caminho", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Toast.makeText(InRestaurantActivity.this, "Erro :(", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
 }

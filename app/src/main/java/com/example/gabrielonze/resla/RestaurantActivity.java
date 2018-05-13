@@ -6,48 +6,77 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.gabrielonze.resla.Adapters.AdapterBook;
 import com.example.gabrielonze.resla.Adapters.AdapterCardapio;
 import com.example.gabrielonze.resla.Adapters.AdapterRestaurante;
+import com.example.gabrielonze.resla.RequestsObjects.ApiManager;
 import com.example.gabrielonze.resla.RequestsObjects.CardapioResponse;
+import com.example.gabrielonze.resla.RequestsObjects.FirstScreenResponse;
 import com.example.gabrielonze.resla.RequestsObjects.RestauranteResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RestaurantActivity extends AppCompatActivity {
 
+    Button book;
     ListView listRes;
     AdapterCardapio adapterRes;
     List<CardapioResponse> listCardapio;
+    int restaurantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restaurant_dishes);
         listRes = findViewById(R.id.top_res);
+        book = findViewById(R.id.bookButton);
+        restaurantId = this.getIntent().getIntExtra("restaurantId", -1);
 
-        String imgUrl = "https://i.ytimg.com/vi/mEBFswpYms4/maxresdefault.jpg";
+        book.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reservar();
+            }
+        });
 
-        listCardapio = new ArrayList<>();
-        listCardapio.add(new CardapioResponse(1, "HAHAHA", "Bla bla bla", imgUrl, 9.99, 0, "Pizza", 2.55D));
-        listCardapio.add(new CardapioResponse(1, "HEHEHE", "Bla bla bla bla", imgUrl, 1.69, 0, "Doce", 5D));
-        listCardapio.add(new CardapioResponse(1, "HUEHUE", "Bla bla", imgUrl, 1.99, 0, "Pizza", 4.8D));
-        listCardapio.add(new CardapioResponse(1, "KKKKKK", "Bla", imgUrl, 6.66, 0, "Drinks", 3.33D));
-        listCardapio.add(new CardapioResponse(1, "RSRSRS", "Bla bla bla bla bla", imgUrl, 11.22, 0, "Doce", 0D));
-
-        adapterRes = new AdapterCardapio(listCardapio, this, true, true);
-        listRes.setAdapter(adapterRes);
+        getData();
 
     }
 
-    public void openQRActivity() {
-        Intent i = new Intent(RestaurantActivity.this, QRCodeActivity.class);
+    public void reservar() {
+        Intent i = new Intent(RestaurantActivity.this, BookActivity.class);
+        i.putExtra("restaurantId", restaurantId);
         startActivity(i);
     }
 
-    //public void showTop
+    public void getData() {
+        Call<List<CardapioResponse>> req = ApiManager.getInstance().cardapio(restaurantId);
+
+        req.enqueue(new Callback<List<CardapioResponse>>() {
+            @Override
+            public void onResponse(Call<List<CardapioResponse>> call, Response<List<CardapioResponse>> response) {
+                List<CardapioResponse> r = response.body();
+
+                adapterRes = new AdapterCardapio(r, RestaurantActivity.this, true, true);
+                listRes.setAdapter(adapterRes);
+            }
+
+            @Override
+            public void onFailure(Call<List<CardapioResponse>> call, Throwable t) {
+                Toast.makeText(RestaurantActivity.this, "Erro :(", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

@@ -101,7 +101,7 @@ public class AdapterRestaurante extends BaseAdapter {
 
     private void productDetails(RestauranteResponse ar) {
         Intent i = new Intent(act, RestaurantActivity.class);
-        // i.putExtra("product", json);
-        act.startActivityForResult(i, 1);
+        i.putExtra("restaurantId", ar.getId());
+        act.startActivity(i);
     }
 }

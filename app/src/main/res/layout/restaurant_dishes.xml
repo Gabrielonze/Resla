@@ -15,8 +15,14 @@
             android:id="@+id/top_res"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/navigation"
-            android:layout_below="@+id/top_in_rest" />
+            android:layout_above="@+id/bookButton" />
+
+        <Button
+            android:id="@+id/bookButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Reservar" />
 
 
     </RelativeLayout>
