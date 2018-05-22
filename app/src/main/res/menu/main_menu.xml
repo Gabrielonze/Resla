@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/navigation_reservas"
-        android:icon="@drawable/flashlight_turn_off"
+        android:icon="@drawable/ic_launcher_foreground"
         android:title="@string/title_reservas" />
 
 

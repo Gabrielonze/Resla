@@ -85,8 +85,6 @@ public class InRestaurantActivity extends AppCompatActivity {
         adapterPedidos = new AdapterCardapio(listOrders, this, true, false);
         listPedidos.setAdapter(adapterPedidos);
 
-        //changeSort(false);
-
         callWaiter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,70 +92,7 @@ public class InRestaurantActivity extends AppCompatActivity {
             }
         });
 
-        /*sortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeSort(true);
-            }
-        });*/
-
     }
-
-    /*private void changeSort(Boolean firstTime) {
-
-        String sort = getIntent().getStringExtra("sort");
-        if (sort == null)
-            sort = "Nota";
-
-        switch (sort) {
-            case "Categoria":
-
-                Collections.sort(listCardapio, new Comparator<CardapioResponse>() {
-                    @Override public int compare(CardapioResponse p1, CardapioResponse p2) {
-                        return (int) (p1.getPrice() - p2.getPrice());
-                    }
-
-                });
-                Log.d("aa", listCardapio.toString());
-                sort = "Preço";
-                break;
-
-
-            case "Preço":
-
-                Collections.sort(listCardapio, new Comparator<CardapioResponse>() {
-                    @Override public int compare(CardapioResponse p1, CardapioResponse p2) {
-                        return (int) (p2.getRating() - p1.getRating());
-                    }
-                });
-                Log.d("aa", listCardapio.toString());
-                sort = "Nota";
-                break;
-
-
-            default:
-
-                Collections.sort(listCardapio, new Comparator<CardapioResponse>() {
-                    @Override public int compare(CardapioResponse p1, CardapioResponse p2) {
-                        return p1.getCategory().hashCode() - p2.getCategory().hashCode();
-                    }
-
-                });
-                Log.d("aa", listCardapio.toString());
-                sort = "Categoria";
-                break;
-        }
-
-        if (firstTime){
-            finish();
-            overridePendingTransition(0, 0);
-            Intent i = getIntent();
-            i.putExtra("sort", sort);
-            startActivity(i);
-            overridePendingTransition(0, 0);
-        }
-        sortButton.setText(sort);
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -183,7 +118,7 @@ public class InRestaurantActivity extends AppCompatActivity {
             public void onResponse(Call<List<CardapioResponse>> call, Response<List<CardapioResponse>> response) {
                 List<CardapioResponse> r = response.body();
 
-                adapterCardapio = new AdapterCardapio(r, InRestaurantActivity.this, true, true);
+                adapterCardapio = new AdapterCardapio(r, InRestaurantActivity.this, false, true);
                 listProducts.setAdapter(adapterCardapio);
             }
 

@@ -69,7 +69,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openQRActivity() {
-        Intent i = new Intent(MainActivity.this, QRCodeActivity.class);
+        /*Intent i = new Intent(MainActivity.this, QRCodeActivity.class);
+        startActivity(i);*/
+
+        Intent i = new Intent(MainActivity.this, InRestaurantActivity.class);
+        i.putExtra("restaurantId", 1);
+        i.putExtra("table", 3);
         startActivity(i);
     }
 

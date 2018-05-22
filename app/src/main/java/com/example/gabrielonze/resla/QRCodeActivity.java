@@ -14,101 +14,48 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.blikoon.qrcodescanner.QrCodeActivity;
+// import com.blikoon.qrcodescanner.QrCodeActivity;
 
-public class QRCodeActivity extends AppCompatActivity  {
-    private Button button;
-    private static final int REQUEST_CODE_QR_SCAN = 101;
-    private static final int PERMISSION_WRITE_SD = 256;
-    private final String LOGTAG = "QRCScanner-MainActivity";
-    private boolean resultFound = false;
+import com.google.zxing.Result;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class QRCodeActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+    private ZXingScannerView mScannerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.qrcode_activity);
-
-        initQReader();
-    }
-
-    private void initIntent() {
-        Intent i = new Intent(QRCodeActivity.this, QrCodeActivity.class);
-        startActivityForResult(i, REQUEST_CODE_QR_SCAN);
-    }
-
-    private void initQReader() {
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.CAMERA}, PERMISSION_WRITE_SD);
-            return;
-        }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_WRITE_SD);
-            return;
-        }
-        initIntent();
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
+        setContentView(mScannerView);                // Set the scanner view as the content view
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_WRITE_SD:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initQReader();
-                } else {
-                    super.onBackPressed();
-                }
-                return;
-        }
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+        mScannerView.startCamera();          // Start camera on resume
     }
-
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(resultCode != Activity.RESULT_OK) {
-            Log.d(LOGTAG,"COULD NOT GET A GOOD RESULT.");
-            if(data==null)
-                return;
-            //Getting the passed result
-            String result = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
-            if( result!=null)
-            {
-                AlertDialog alertDialog = new AlertDialog.Builder(QRCodeActivity.this).create();
-                alertDialog.setTitle("Scan Error");
-                alertDialog.setMessage("QR Code could not be scanned");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-            }
-            return;
-
-        }
-        if(requestCode == REQUEST_CODE_QR_SCAN && resultFound == false) {
-            if(data==null)
-                return;
-            else
-                resultFound = true;
-
-            //Getting the passed result
-            String result = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
-            Log.d(LOGTAG,"Have scan result in your app activity :"+ result);
-            final AlertDialog alertDialog = new AlertDialog.Builder(QRCodeActivity.this).create();
-            alertDialog.setTitle("Scan result");
-            alertDialog.setMessage(result);
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                            startActivity(new Intent(QRCodeActivity.this, InRestaurantActivity.class));
-                        }
-                    });
-            alertDialog.show();
-
-        }
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();           // Stop camera on pause
     }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        // Do something with the result here
+        Log.v("AA", rawResult.getText()); // Prints scan results
+        Log.v("AA", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+
+        Intent i = new Intent(QRCodeActivity.this, InRestaurantActivity.class);
+        i.putExtra("restaurantId", 1);
+        i.putExtra("table", 3);
+        startActivity(i);
+
+        // If you would like to resume scanning, call this method below:
+        // mScannerView.resumeCameraPreview(this);
+    }
+
 }
