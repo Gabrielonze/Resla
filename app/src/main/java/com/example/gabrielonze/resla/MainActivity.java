@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.gabrielonze.resla.Adapters.AdapterBook;
-import com.example.gabrielonze.resla.Adapters.AdapterRestaurante;
+import com.example.gabrielonze..Adapters.AdapterRestaurante;
 import com.example.gabrielonze.resla.RequestsObjects.ApiManager;
 import com.example.gabrielonze.resla.RequestsObjects.BookResponse;
 import com.example.gabrielonze.resla.RequestsObjects.FirstScreenResponse;
